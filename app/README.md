@@ -14,7 +14,7 @@
 3. Go to http://0.0.0.0:3001/
 
 ### Web deployment:
-Build a virtual environment
+Build a virtual environment (To activate: source activate web)
 1. pip install flask pandas plotly gunicorn
 2. touch Procfile
   web gunicorn web_name:app
