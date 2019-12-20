@@ -37,17 +37,17 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/')
 @app.route('/index')
 def index():
-    
+
     # extract data needed for visuals
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
-    
+
     # Second set of data
     # extract language data
     language_counts = df['language'].value_counts().sort_values(ascending=False)
     language_names = list(language_counts.index)
-    
+
     # Third set of data
     # calculate total number of positive cases in training data
     pos_case = {}
@@ -57,7 +57,7 @@ def index():
         pos_case[column] = total
         data.append(total)
     pos_case_df = pd.DataFrame.from_dict(pos_case, orient='index', columns=['count']).sort_values(by='count', ascending=False)
-    
+
     # create visuals
     graphs = [
         {
@@ -120,11 +120,11 @@ def index():
             }
         }
     ]
-    
+
     # encode plotly graphs in JSON
     ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
-    
+
     # render web page with plotly graphs
     return render_template('master.html', ids=ids, graphJSON=graphJSON)
 
@@ -133,13 +133,13 @@ def index():
 @app.route('/go')
 def go():
     # save user input in query
-    query = request.args.get('query', '') 
+    query = request.args.get('query', '')
 
     # use model to predict classification for query
     classification_labels = model.predict([query])[0]
     classification_results = dict(zip(df.columns[5:], classification_labels))
 
-    # This will render the go.html Please see that file. 
+    # This will render the go.html Please see that file.
     return render_template(
         'go.html',
         query=query,
