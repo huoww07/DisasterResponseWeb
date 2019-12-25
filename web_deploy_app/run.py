@@ -12,11 +12,8 @@ from web_deploy_app import app
 #app = Flask(__name__)
 
 
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import word_tokenize
-
 def tokenize(text):
-
+    from tokenizer_function import tokenize
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
 

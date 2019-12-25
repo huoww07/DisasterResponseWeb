@@ -14,7 +14,7 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
-    from nltk.tokenize import word_tokenize
+    from tokenizer_function import tokenize
     text = word_tokenize(text)
     return text
 
