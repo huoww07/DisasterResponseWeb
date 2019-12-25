@@ -12,17 +12,17 @@ from web_deploy_app import app
 #app = Flask(__name__)
 
 
-def tokenize(text):
-    from tokenizer_function import tokenize
-    tokens = word_tokenize(text)
-    lemmatizer = WordNetLemmatizer()
+#def tokenize(text):
+#    from tokenizer_function import tokenize
+#    tokens = word_tokenize(text)
+#    lemmatizer = WordNetLemmatizer()
 
-    clean_tokens = []
-    for tok in tokens:
-        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
-        clean_tokens.append(clean_tok)
+#    clean_tokens = []
+#    for tok in tokens:
+#        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
+#        clean_tokens.append(clean_tok)
 
-    return clean_tokens
+#    return clean_tokens
 
 # load data
 engine = create_engine('sqlite:///../data/Clean_entry_data.db')
