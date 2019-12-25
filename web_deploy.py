@@ -1,1 +1,1 @@
-from web_deploy_app import app 
+from web_deploy_app import app
