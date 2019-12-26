@@ -4,6 +4,9 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 def load_data(database_filepath):
+    '''
+    Read the previously cleaned data from SQL database
+    '''
     from sqlalchemy import create_engine
     engine = create_engine('sqlite:///'+database_filepath)
     df = pd.read_sql("SELECT * from data", engine)
@@ -14,11 +17,19 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
+    '''
+    tokenize the input message using nltk package
+    '''
     from nltk.tokenize import word_tokenize
     text = word_tokenize(text)
     return text
 
 def build_model():
+    '''
+    Build ML model using sklearn:
+    1. transform text input by countvectorizer and TfidfTransformer
+    2. predict by MultiOutputClassifier using RandomForestClassifier
+    '''
     from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
     from sklearn.pipeline import Pipeline
     from sklearn.multioutput import MultiOutputClassifier
@@ -32,6 +43,9 @@ def build_model():
     return pipeline
 
 def evaluate_model(model, X_test, Y_test, category_names):
+    '''
+    evalueate the model prediction accuracy using average f1 score.
+    '''
     from sklearn.metrics import f1_score
     y_pred = model.predict(X_test)
     f1scores = []
@@ -45,6 +59,9 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    '''
+    save the model as pickle file.
+    '''
     import pickle
     pickle.dump(model, open(model_filepath, 'wb'))
 
@@ -54,6 +71,7 @@ def main():
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
+        # split the data into training and test datasets
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
 
         print('Building model...')

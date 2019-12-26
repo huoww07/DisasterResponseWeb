@@ -5,6 +5,10 @@ from langdetect import detect
 import pycountry
 
 def load_data(messages_filepath, categories_filepath):
+    '''
+    1. Extract data:
+    Load training data, detect the language of each message and return it as a datafram.
+    '''
     messages = pd.read_csv(messages_filepath)
     # detect language input
     names = []
@@ -28,6 +32,12 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    '''
+    2. Transform data:
+    clean the training data so that the categories are separated and stored as categorical numeric format.
+    duplicated input messages are dropped
+    return the clean data as dataframe
+    '''
     categories = df['categories'].str.split(";", expand=True)
     category_colnames = categories.iloc[1,:].apply(lambda x: x.split("-")[0])
     categories.columns = category_colnames
@@ -41,12 +51,19 @@ def clean_data(df):
     return df
 
 def save_data(df, database_filename):
+    '''
+    3. Load data:
+    save the data as SQL database
+    '''
     from sqlalchemy import create_engine
     engine = create_engine('sqlite:///'+database_filename)
-    df.to_sql("data", engine, index=False, if_exists='replace')  
+    df.to_sql("data", engine, index=False, if_exists='replace')
     return None
 
 def main():
+    '''
+    Run the ETL pipeline to clean data and save it in SQL database
+    '''
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
@@ -57,12 +74,12 @@ def main():
 
         print('Cleaning data...')
         df = clean_data(df)
-        
+
         print('Saving data...\n    DATABASE: {}'.format(database_filepath))
         save_data(df, database_filepath)
-        
+
         print('Cleaned data saved to database!')
-    
+
     else:
         print('Please provide the filepaths of the messages and categories '\
               'datasets as the first and second argument respectively, as '\
